@@ -1,7 +1,6 @@
-import ColorHarmonixer from './components/ColorHarmonizer';
-import ContrastChecker from './components/ContrastChecker';
-import './styles/App.css';
+import React from 'react';
+import ColorHarmonizer from './components/ColorHarmonizer';
 
-function App() {
-  return (
-    <div className="App">
+const App: React.FC = () => <ColorHarmonizer />;
+
+export default App;

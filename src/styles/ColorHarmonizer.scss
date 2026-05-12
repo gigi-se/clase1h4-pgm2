@@ -1,45 +1,166 @@
-$transition-speed: 0.3s;
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
 
-.harmonies {
-  margin: 2rem 0;
+$transition-speed: 0.4s;
+$bg: #0e0e12;
+$surface: #17171f;
+$border: rgba(255, 255, 255, 0.08);
+$text: #f0f0f5;
+$muted: #888899;
 
-  input[type="range"] {
-    width: 100%;
-    margin-bottom: 2rem;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: $bg;
+  color: $text;
+  font-family: 'DM Mono', monospace;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-align: center;
+    span { opacity: 0.4; }
+  }
+}
+
+.harmonizer-wrapper {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 820px;
+
+  @media (max-width: 680px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.panel {
+  flex: 1;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 20px;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $muted;
+  }
+}
+
+// ── Slider ────────────────────────────────────────────────────
+.hue-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.72rem;
+    color: $muted;
+    letter-spacing: 0.08em;
   }
 
-  .grid {
+  input[type='range'] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(
+      to right,
+      hsl(0,70%,50%), hsl(60,70%,50%), hsl(120,70%,50%),
+      hsl(180,70%,50%), hsl(240,70%,50%), hsl(300,70%,50%), hsl(360,70%,50%)
+    );
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.8);
+      transition: transform 0.15s ease;
+      &:hover { transform: scale(1.2); }
+    }
+  }
+
+  .hue-value {
+    font-size: 0.72rem;
+    color: $muted;
+    text-align: right;
+  }
+}
+
+// ── Objeto 2D único: cuadrado con 4 cuadrantes ────────────────
+.color-square {
+  width: 100%;
+  aspect-ratio: 1 / 1;   // siempre cuadrado
+  display: grid;
+  grid-template-columns: 1fr 1fr;  // 2 columnas
+  grid-template-rows: 1fr 1fr;     // 2 filas → 4 cuadrantes
+  border-radius: 50%;
+  overflow: hidden;                // los bordes redondeados se aplican al conjunto
+
+  .quadrant {
     display: flex;
-    gap: 1rem;
+    align-items: flex-end;
     justify-content: center;
+    padding-bottom: 0.6rem;
+    transition: background $transition-speed ease;  // animación suave al cambiar
 
-    .card {
-      width: 120px;
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      color: white;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-      font-weight: bold;
-      transition: all $transition-speed ease;
-
-      &:hover { transform: translateY(-5px); }
+    .quadrant-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.22);
+      padding: 2px 7px;
+      border-radius: 20px;
     }
   }
 }
 
-.contrast-tool {
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 15px;
+// ── Badge animado panel aleatorio ─────────────────────────────
+.random-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: $muted;
 
-  .preview-box {
-    margin-top: 1rem;
-    padding: 2rem;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 600;
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: blink 1.2s ease-in-out infinite;
   }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
 }
